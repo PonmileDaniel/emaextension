@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "Ema Audit Extension",
+  "version": "1.0.0",
+  "description": "Chrome extension for Ema audit",
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://twitter.com/*", "*://x.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
+  ],
+  "permissions": ["storage", "tabs", "activeTab", "scripting"],
+  "host_permissions": ["*://twitter.com/*", "*://x.com/*"]
+}

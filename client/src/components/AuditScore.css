@@ -1,0 +1,75 @@
+.audit-score {
+  background: white;
+  padding: 16px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.score-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.score-emoji {
+  font-size: 18px;
+}
+
+.score-title {
+  font-weight: bold;
+  color: #111827;
+  margin: 0;
+  font-size: 16px;
+}
+
+.score-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.score-circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+}
+
+.score-circle.score-excellent {
+  background: #dcfce7;
+}
+
+.score-circle.score-good {
+  background: #fef3c7;
+}
+
+.score-circle.score-poor {
+  background: #fee2e2;
+}
+
+.score-number {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.score-excellent .score-number {
+  color: #059669;
+}
+
+.score-good .score-number {
+  color: #d97706;
+}
+
+.score-poor .score-number {
+  color: #dc2626;
+}
+
+.score-description {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.5;
+}

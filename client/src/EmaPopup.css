@@ -1,0 +1,127 @@
+.ema-popup {
+  width: 320px;
+  height: 600px;
+  background: #f9fafb;
+  font-family: system-ui, -apple-system, sans-serif;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.popup-content {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.initial-actions {
+  padding: 16px;
+}
+
+.run-audit-button {
+  width: 100%;
+  background: #4f46e5;
+  color: white;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.run-audit-button:hover {
+  background: #2563eb;
+}
+
+.run-audit-button:disabled {
+  background: #d1d5db;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.run-audit-button:disabled:hover {
+  background: #d1d5db;
+  transform: none;
+}
+
+.button-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.audit-description {
+  font-size: 12px;
+  color: #6b7280;
+  text-align: center;
+  margin: 8px 0 0 0;
+}
+
+.loading-state {
+  padding: 16px;
+  text-align: center;
+}
+
+.loading-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.loading-spinner {
+  width: 24px;
+  height: 24px;
+  animation: spin 1s linear infinite;
+  color: #3b82f6;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-text {
+  color: #374151;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.loading-description {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0;
+}
+
+.results-state {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.audit-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.no-profile-state {
+  padding: 16px;
+  text-align: center;
+}
+
+.no-profile-message {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.5;
+}

@@ -328,7 +328,7 @@
     }
   };
 
-  // ===== ADD THIS MISSING FUNCTION =====
+  // ADD THIS MISSING FUNCTION
   const notifyTweetCount = (count) => {
     chrome.runtime.sendMessage({
       type: 'TWEET_COUNT_UPDATED',
@@ -338,7 +338,7 @@
     });
   };
 
-  // ===== MESSAGE LISTENER =====
+  // MESSAGE LISTENER
   chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.type === 'GET_PROFILE_DATA') {
       sendResponse({ success: true, data: extractProfileData() });

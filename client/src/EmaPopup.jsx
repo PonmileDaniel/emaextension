@@ -589,8 +589,8 @@ const EmaPopup = () => {
                           <div className="tweet-header">
                             <strong>Tweet {index + 1}</strong>
                             {tweet.isRetweet && <span className="retweet-badge">RT</span>}
-                            {tweet.media.hasImage && <span className="media-badge">Picture present</span>}
-                            {tweet.media.hasVideo && <span className="media-badge">Video present</span>}
+                            {tweet.media.hasImage && <span className="media-badge"> Picture present </span>}
+                            {tweet.media.hasVideo && <span className="media-badge"> Video present </span>}
                           </div>
                           <div className="tweet-text">
                             {tweet.text.substring(0, 100)}

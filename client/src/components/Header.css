@@ -47,10 +47,42 @@
   color: #9ca3af;
 }
 
+.pin-button {
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pin-button:hover {
+  background: #f3f4f6;
+}
+
+.pin-button.pinned {
+  background: #dbeafe;
+}
+
+.pin-button.pinned .pin-icon {
+  color: #2563eb;
+}
+
+.pin-button:not(.pinned) .pin-icon {
+  color: #9ca3af;
+}
+
 .control-close {
   cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.2s;
 }
 
 .control-close:hover {
   color: #6b7280;
+  background: #f3f4f6;
 }

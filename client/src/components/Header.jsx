@@ -1,8 +1,8 @@
 import React from 'react';
-import { X, Lock } from 'lucide-react';
+import { X, Lock, Unlock } from 'lucide-react';
 import './Header.css';
 
-const Header = () => {
+const Header = ({ isPinned, onTogglePin }) => {
   return (
     <div className="header">
       <div className="header-brand">
@@ -12,7 +12,17 @@ const Header = () => {
         <span className="brand-name">Ema</span>
       </div>
       <div className="header-controls">
-        <Lock className="control-icon" />
+        <button
+          onClick={onTogglePin}
+          className={`pin-button ${isPinned ? 'pinned' : ''}`}
+          title={isPinned ? 'Unpin extension' : 'Pin extension'}
+        >
+          {isPinned ? (
+            <Lock className="control-icon pin-icon" />
+          ) : (
+            <Unlock className="control-icon pin-icon" />
+          )}
+        </button>
         <X className="control-icon control-close" />
       </div>
     </div>

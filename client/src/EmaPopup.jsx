@@ -610,22 +610,6 @@ const EmaPopup = () => {
                         </div>
                       ))}
                     </div>
-
-                    {/* Analysis Summary */}
-                    {auditResults && (
-                      <div className="debug-analysis">
-                        <h5>📊 Analysis Summary:</h5>
-                        <div className="analysis-item">
-                          <strong>Average Likes:</strong> {Math.round(extractedTweets.reduce((sum, t) => sum + t.metrics.likes, 0) / extractedTweets.length)}
-                        </div>
-                        <div className="analysis-item">
-                          <strong>Average Retweets:</strong> {Math.round(extractedTweets.reduce((sum, t) => sum + t.metrics.retweets, 0) / extractedTweets.length)}
-                        </div>
-                        <div className="analysis-item">
-                          <strong>Total Engagement:</strong> {extractedTweets.reduce((sum, t) => sum + t.metrics.likes + t.metrics.retweets + t.metrics.replies, 0)}
-                        </div>
-                      </div>
-                    )}
                   </div>
                 )}
               </div>

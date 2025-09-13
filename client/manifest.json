@@ -4,7 +4,11 @@
   "version": "1.0.0",
   "description": "Chrome extension for Ema audit",
   "action": {
-    "default_popup": "popup.html"
+    "default_popup": "popup.html",
+    "default_title": "Ema Audit"
+  },
+  "side_panel": {
+    "default_path": "popup.html"
   },
   "background": {
     "service_worker": "background.js"
@@ -16,6 +20,6 @@
       "run_at": "document_end"
     }
   ],
-  "permissions": ["storage", "tabs", "activeTab", "scripting"],
+  "permissions": ["storage", "tabs", "activeTab", "scripting", "sidePanel"],
   "host_permissions": ["*://twitter.com/*", "*://x.com/*"]
 }

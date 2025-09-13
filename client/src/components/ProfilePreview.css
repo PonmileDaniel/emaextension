@@ -1,29 +1,29 @@
 .profile-preview {
   background: white;
-  padding: 16px;
+  padding: 20px; /* Increased padding for side panel */
   border-bottom: 1px solid #e5e7eb;
 }
 
 .profile-compact {
-  padding: 12px 16px;
+  padding: 16px 20px; /* Increased horizontal padding */
 }
 
 .profile-content {
   display: flex;
   align-items: start;
-  gap: 12px;
+  gap: 16px; /* Increased gap for more breathing room */
 }
 
 .profile-avatar {
-  width: 48px;
-  height: 48px;
+  width: 56px; /* Slightly larger for side panel */
+  height: 56px;
   border-radius: 50%;
   object-fit: cover;
 }
 
 .avatar-small {
-  width: 40px;
-  height: 40px;
+  width: 48px;
+  height: 48px;
 }
 
 .profile-info {

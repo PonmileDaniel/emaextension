@@ -1,6 +1,8 @@
 .ema-popup {
-  width: 320px;
-  height: 600px;
+  /* Remove fixed dimensions for side panel */
+  width: 100%;
+  min-height: 100vh;
+  max-width: 400px; /* Side panels are typically wider */
   background: #f9fafb;
   font-family: system-ui, -apple-system, sans-serif;
   overflow: hidden;
@@ -11,6 +13,8 @@
 .popup-content {
   flex: 1;
   overflow-y: auto;
+  /* Add some padding for side panel breathing room */
+  padding-bottom: 20px;
 }
 
 .initial-actions {
@@ -282,4 +286,33 @@
 
 .manual-extract:hover {
   background: #2563eb;
+}
+
+/* Add responsive adjustments for side panel */
+@media (min-width: 350px) {
+  .ema-popup {
+    max-width: none;
+  }
+  
+  .initial-actions,
+  .loading-state,
+  .tweet-instructions {
+    padding: 20px;
+  }
+}
+
+/* Popup mode (Firefox, Safari, fallback) */
+@media (max-width: 399px) {
+  .ema-popup {
+    width: 350px;
+    min-height: 500px;
+    max-height: 600px;
+  }
+}
+
+/* Side panel mode (Chrome, Edge, etc.) */
+@media (min-width: 400px) {
+  .ema-popup {
+    max-width: 400px;
+  }
 }

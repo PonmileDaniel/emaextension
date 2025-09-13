@@ -271,19 +271,6 @@
       }
       return {
         tweets: allTweets,
-        // statistics: {
-        //   total: allTweets.length, 
-        //   originals: allTweets.filter(t => t.type === "original").length, 
-        //   pinned: allTweets.filter(t => t.type === "pinned").length,
-        //   withImages: allTweets.filter(t => t.media.hasImage).length, 
-        //   withVideos: allTweets.filter(t => t.media.hasVideo).length,
-        //   avgLikes: allTweets.length > 0 ? Math.round(allTweets.reduce((sum, t) => sum + t.metrics.likes, 0) / allTweets.length) : 0,
-        //   avgRetweets: allTweets.length > 0 ? Math.round(allTweets.reduce((sum, t) => sum + t.metrics.retweets, 0) / allTweets.length) : 0,
-        //   totalEngagement: allTweets.reduce((sum, t) => sum + t.metrics.likes + t.metrics.retweets + t.metrics.replies, 0),
-        //   totalLikes: allTweets.reduce((sum, t) => sum + t.metrics.likes, 0),
-        //   totalRetweets: allTweets.reduce((sum, t) => sum + t.metrics.retweets, 0),
-        //   totalReplies: allTweets.reduce((sum, t) => sum + t.metrics.replies, 0)
-        // },
         extractedAt: new Date().toISOString(), totalFound: allTweets.length
       };
     } catch (error) {

@@ -18,7 +18,6 @@ const EmaPopup = () => {
   const [isPinned, setIsPinned] = useState(false);
   const [isLoadingProfile, setIsLoadingProfile] = useState(true);
   const [expandedSection, setExpandedSection] = useState(null); // Add missing state
-  const [showDebugData, setShowDebugData] = useState(false); // Add missing state
 
   // Listen for tweet count updates from content script
   useEffect(() => {
@@ -95,69 +94,79 @@ const EmaPopup = () => {
   }, []);
 
   // Handle popup staying open when pinned
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (!isPinned) return;
+  // useEffect(() => {
+  //   const handleClickOutside = (event) => {
+  //     if (!isPinned) return;
       
-      // Prevent popup from closing when pinned
-      event.preventDefault();
-      event.stopPropagation();
-    };
+  //     // Prevent popup from closing when pinned
+  //     event.preventDefault();
+  //     event.stopPropagation();
+  //   };
 
-    if (isPinned) {
-      document.addEventListener('click', handleClickOutside, true);
-      document.addEventListener('blur', handleClickOutside, true);
-    }
+  //   if (isPinned) {
+  //     document.addEventListener('click', handleClickOutside, true);
+  //     document.addEventListener('blur', handleClickOutside, true);
+  //   }
 
-    return () => {
-      document.removeEventListener('click', handleClickOutside, true);
-      document.removeEventListener('blur', handleClickOutside, true);
-    };
-  }, [isPinned]);
+  //   return () => {
+  //     document.removeEventListener('click', handleClickOutside, true);
+  //     document.removeEventListener('blur', handleClickOutside, true);
+  //   };
+  // }, [isPinned]);
 
-  const handleTogglePin = async () => {
-    const newPinnedState = !isPinned;
-    setIsPinned(newPinnedState);
+
+  //  Update the Pin toggle function to Provide better feedback
+  // const handleTogglePin = async () => {
+  //   const newPinnedState = !isPinned;
+  //   setIsPinned(newPinnedState);
     
-    try {
-      // Get current tab
-      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+  //   try {
+  //     // Get current tab
+  //     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
       
-      if (newPinnedState) {
-        // Store the pin state with current tab ID
-        await chrome.storage.local.set({ 
-          extensionPinned: true,
-          currentTabId: tab.id
-        });
+  //     if (newPinnedState) {
+  //       // Store the pin state with current tab ID
+  //       await chrome.storage.local.set({ 
+  //         extensionPinned: true,
+  //         currentTabId: tab.id,
+  //         pinTimestamp: Date.now()
+  //       });
         
-        // Notify background script about pin state
-        chrome.runtime.sendMessage({
-          type: 'PIN_STATE_CHANGED',
-          data: { isPinned: true, tabId: tab.id }
-        });
+  //       // Notify background script about pin state
+  //       chrome.runtime.sendMessage({
+  //         type: 'PIN_STATE_CHANGED',
+  //         data: { isPinned: true, tabId: tab.id }
+  //       });
         
-        console.log('Extension pinned to tab:', tab.id);
-      } else {
-        // Unpin - remove pin state
-        await chrome.storage.local.set({ 
-          extensionPinned: false,
-          currentTabId: null 
-        });
+  //       console.log('Extension pinned to tab:', tab.id);
+
+  //       // Show user Feedback
+  //       const originalTitle = document.title;
+  //       document.title = 'Ema - Pinned';
+  //       setTimeout(() => {
+  //         document.title = originalTitle;
+  //       }, 2000);
+  //     } else {
+  //       // Unpin - remove pin state
+  //       await chrome.storage.local.set({ 
+  //         extensionPinned: false,
+  //         currentTabId: null 
+  //       });
         
-        // Notify background script about pin state
-        chrome.runtime.sendMessage({
-          type: 'PIN_STATE_CHANGED',
-          data: { isPinned: false, tabId: tab.id }
-        });
+  //       // Notify background script about pin state
+  //       chrome.runtime.sendMessage({
+  //         type: 'PIN_STATE_CHANGED',
+  //         data: { isPinned: false, tabId: tab.id }
+  //       });
         
-        console.log('Extension unpinned');
-      }
-    } catch (error) {
-      console.error('Error saving pin state:', error);
-      // Revert state on error
-      setIsPinned(!newPinnedState);
-    }
-  };
+  //       console.log('Extension unpinned');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error saving pin state:', error);
+  //     // Revert state on error
+  //     setIsPinned(!newPinnedState);
+  //   }
+  // };
 
   const handleRunAudit = async () => {
     if (!profileData) {
@@ -202,14 +211,7 @@ const EmaPopup = () => {
         console.log(`🎉 Extracted ${response.count} tweets in popup:`, response.data);
         
         // Show detailed extraction results
-        console.group('📊 Tweet Extraction Results');
-        console.log('Total tweets found:', response.count);
-        console.log('Sample tweets:', response.data.slice(0, 5));
-        console.log('Retweets:', response.data.filter(t => t.isRetweet).length);
-        console.log('Original tweets:', response.data.filter(t => !t.isRetweet).length);
-        console.log('With images:', response.data.filter(t => t.media.hasImage).length);
-        console.log('With videos:', response.data.filter(t => t.media.hasVideo).length);
-        console.groupEnd();
+        console.log(`🎉 Extracted ${response.count} tweets`);
         
         if (response.count < 10) {
           setTweetExtractionStep('need-more');
@@ -244,50 +246,16 @@ const EmaPopup = () => {
   }, [currentTweetCount, tweetExtractionStep]);
 
   const analyzeExtractedData = (tweets) => {
-    // Mock analysis - replace with actual analysis logic
     console.log('🔍 Analyzing tweets for insights...');
     
-    // Calculate basic metrics
-    const totalLikes = tweets.reduce((sum, tweet) => sum + tweet.metrics.likes, 0);
-    const totalRetweets = tweets.reduce((sum, tweet) => sum + tweet.metrics.retweets, 0);
-    const avgLikes = tweets.length > 0 ? Math.round(totalLikes / tweets.length) : 0;
-    const avgRetweets = tweets.length > 0 ? Math.round(totalRetweets / tweets.length) : 0;
-    
-    const hasImages = tweets.filter(t => t.media.hasImage).length;
-    const hasVideos = tweets.filter(t => t.media.hasVideo).length;
-    const retweets = tweets.filter(t => t.isRetweet).length;
-    
-    console.log('Analysis Results:', {
-      totalTweets: tweets.length,
-      avgLikes,
-      avgRetweets,
-      hasImages,
-      hasVideos,
-      retweets,
-      originalTweets: tweets.length - retweets
-    });
-
-    // Generate mock audit results based on analysis
+    // TODO: Replace with actual AI analysis logic
     const mockResults = {
-      score: avgLikes > 50 ? 8 : avgLikes > 20 ? 6 : 4,
+      score: 7,
       maxScore: 10,
-      description: `Analyzed ${tweets.length} tweets. Average engagement: ${avgLikes} likes, ${avgRetweets} retweets.`,
-      doingRight: [
-        tweets.length > 20 ? 'Active posting schedule' : null,
-        hasImages > tweets.length * 0.3 ? 'Good use of visual content' : null,
-        avgLikes > 20 ? 'Strong audience engagement' : null
-      ].filter(Boolean),
-      doingWrong: [
-        avgLikes < 10 ? 'Low engagement rates need improvement' : null,
-        retweets > tweets.length * 0.7 ? 'Too many retweets vs original content' : null,
-        hasVideos === 0 ? 'Missing video content opportunities' : null
-      ].filter(Boolean),
-      shouldStart: [
-        'Create more original content',
-        hasVideos === 0 ? 'Start using video content' : null,
-        avgLikes < 20 ? 'Improve engagement strategies' : null,
-        'Post at optimal times for your audience'
-      ].filter(Boolean)
+      description: `Analysis complete for ${tweets.length} tweets.`,
+      doingRight: ['Consistent posting activity'],
+      doingWrong: ['Engagement could be improved'],
+      shouldStart: ['Focus on original content creation']
     };
     
     setAuditResults(mockResults);
@@ -308,7 +276,7 @@ const EmaPopup = () => {
 
   return (
     <div className="ema-popup">
-      <Header isPinned={isPinned} onTogglePin={handleTogglePin} />
+      <Header/>
       
       <div className="popup-content">
         {currentState === 'initial' && (
@@ -356,7 +324,7 @@ const EmaPopup = () => {
           <div className="loading-state">
             {tweetExtractionStep === 'instructions' && (
               <div className="tweet-instructions">
-                <h3>Scanning for Tweets 📊</h3>
+                <h3>Scanning for Tweets </h3>
                 <div className="tweet-counter">
                   <div className="counter-circle">
                     <span className="counter-number">{currentTweetCount}</span>
@@ -502,118 +470,6 @@ const EmaPopup = () => {
             />
 
             <Footer />
-          </div>
-        )}
-
-        {/* Debug Data Section - Show if we have data OR if we're in loading state */}
-        {(extractedTweets.length > 0 || profileData || currentTweetCount > 0) && (
-          <div className="debug-section">
-            <button 
-              onClick={() => setShowDebugData(!showDebugData)}
-              className="debug-toggle"
-            >
-              {showDebugData ? '🔽 Hide Debug Data' : '🔼 Show Debug Data'} 
-              ({currentTweetCount > 0 ? `${currentTweetCount} tweets` : 'Profile data'})
-            </button>
-            
-            {showDebugData && (
-              <div className="debug-content">
-                {/* Profile Data */}
-                {profileData && (
-                  <div className="debug-profile">
-                    <h4>📋 Profile Data</h4>
-                    <div className="debug-item">
-                      <strong>Name:</strong> {profileData.name}
-                    </div>
-                    <div className="debug-item">
-                      <strong>Handle:</strong> {profileData.handle}
-                    </div>
-                    <div className="debug-item">
-                      <strong>Bio:</strong> {profileData.bio}
-                    </div>
-                    <div className="debug-item">
-                      <strong>Followers:</strong> {profileData.followers}
-                    </div>
-                    <div className="debug-item">
-                      <strong>Following:</strong> {profileData.following}
-                    </div>
-                    <div className="debug-item">
-                      <strong>Avatar URL:</strong> {profileData.avatar ? 'Present' : 'Missing'}
-                    </div>
-                  </div>
-                )}
-
-                {/* Real-time Tweet Count */}
-                {currentTweetCount > 0 && (
-                  <div className="debug-tweets">
-                    <h4>📊 Real-time Tweet Count</h4>
-                    <div className="debug-stats">
-                      <div className="stat-item">
-                        <strong>Currently Found:</strong> {currentTweetCount}
-                      </div>
-                      <div className="stat-item">
-                        <strong>Status:</strong> {
-                          tweetExtractionStep === 'instructions' ? 'Scanning...' :
-                          tweetExtractionStep === 'extracting' ? 'Extracting...' :
-                          tweetExtractionStep === 'complete' ? 'Complete' :
-                          'Ready'
-                        }
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* Extracted Tweet Data */}
-                {extractedTweets.length > 0 && (
-                  <div className="debug-tweets">
-                    <h4>📝 Extracted Tweets ({extractedTweets.length})</h4>
-                    <div className="debug-stats">
-                      <div className="stat-item">
-                        <strong>Original:</strong> {extractedTweets.filter(t => !t.isRetweet).length}
-                      </div>
-                      <div className="stat-item">
-                        <strong>Retweets:</strong> {extractedTweets.filter(t => t.isRetweet).length}
-                      </div>
-                      <div className="stat-item">
-                        <strong>With Images:</strong> {extractedTweets.filter(t => t.media.hasImage).length}
-                      </div>
-                      <div className="stat-item">
-                        <strong>With Videos:</strong> {extractedTweets.filter(t => t.media.hasVideo).length}
-                      </div>
-                    </div>
-                    
-                    <div className="tweet-samples">
-                      <h5>📄 Sample Tweets (First 5):</h5>
-                      {extractedTweets.slice(0, 15).map((tweet, index) => (
-                        <div key={index} className="tweet-debug-item">
-                          <div className="tweet-header">
-                            <strong>Tweet {index + 1}</strong>
-                            {tweet.isRetweet && <span className="retweet-badge">RT</span>}
-                            {tweet.media.hasImage && <span className="media-badge"> Picture present </span>}
-                            {tweet.media.hasVideo && <span className="media-badge"> Video present </span>}
-                          </div>
-                          <div className="tweet-text">
-                            {tweet.text.substring(0, 100)}
-                            {tweet.text.length > 100 && '...'}
-                          </div>
-                          <div className="tweet-metrics">
-                            <span>❤️ {tweet.metrics.likes}</span>
-                            <span>🔄 {tweet.metrics.retweets}</span>
-                            <span>💬 {tweet.metrics.replies}</span>
-                            <span>👁️ {tweet.metrics.views}</span>
-                          </div>
-                          {tweet.timestamp && (
-                            <div className="tweet-time">
-                              📅 {new Date(tweet.timestamp).toLocaleDateString()}
-                            </div>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
           </div>
         )}
       </div>

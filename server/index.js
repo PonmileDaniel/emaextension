@@ -18,7 +18,7 @@ const PORT = process.env.PORT || 3000;
 app.use(helmet());
 app.use(morgan('combined'));
 app.use(bodyParser.json());
-app.use(cors());
+// app.use(cors());
 
 // CORS configuration
 app.use(

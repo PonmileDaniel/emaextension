@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { ChevronRight, BarChart3, Target, Zap, Shield, CheckCircle, ArrowRight, Twitter, TrendingUp, Users, MessageSquare } from 'lucide-react';
 import "./landpage.css";
 
@@ -250,9 +251,9 @@ function landpage({ onNavigateToAudit }) {
               <span>Install Extension Now</span>
               <ArrowRight size={16} />
             </button>
-            <a href="/privacy.html" className="final-cta-secondary">
+                        <Link to="/privacy" className="final-cta-secondary">
               Privacy Policy
-            </a>
+            </Link>
           </div>
         </div>
       </section>
@@ -269,7 +270,7 @@ function landpage({ onNavigateToAudit }) {
           
           <div className="footer-copyright">
             <p>&copy; 2025 Ema. All rights reserved.</p>
-            <p><a href="/privacy.html" style={{color: '#666', textDecoration: 'none'}}>Privacy Policy</a></p>
+            <p><Link to="/privacy" style={{color: '#666', textDecoration: 'none'}}>Privacy Policy</Link></p>
           </div>
         </div>
       </footer>

@@ -6,19 +6,16 @@ export default defineConfig({
   plugins: [react()],
   build: {
     rollupOptions: {
-      input: {
-        popup: resolve(__dirname, 'popup.html')
-      },
+      input: resolve(__dirname, 'popup.html'),
       output: {
-        entryFileNames: `[name].js`,
-        chunkFileNames: `[name].js`,
-        assetFileNames: `[name].[ext]`
+        entryFileNames: 'popup.js',
+        chunkFileNames: '[name].js',
+        assetFileNames: '[name].[ext]',
+        format: 'iife'
       }
-    }
-  },
-  server: {
-    mimeTypes: {
-      'application/javascript': ['js', 'jsx']
-    }
+    },
+    outDir: 'dist',
+    emptyOutDir: true,
+    target: 'esnext'
   }
 })

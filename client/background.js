@@ -40,7 +40,7 @@ if (supportsSidePanel) {
 // Handle messages from content script
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.type === 'PROFILE_DATA_EXTRACTED') {
-    console.log('Profile data received:', request.data);
+    // console.log('Profile data received:', request.data);
     
     // Store in background for popup access
     chrome.storage.local.set({

@@ -1,12 +1,9 @@
 (() => {
   // SCRIPT INITIALIZATION GUARD 
   if (window.hasEmaExtensionRun) {
-    console.log("EMA Extension: Script already running. Exiting to prevent errors.");
     return;
   }
   window.hasEmaExtensionRun = true;
-
-  console.log('🚀 EMA Extension content script initializing...');
 
   // DECLARE ALL VARIABLES ONCE AT THE TOP
   let tweetCountObserver = null;
@@ -62,7 +59,6 @@
       followers = formatCount(followers);
       following = formatCount(following);
       if (!name || !handle) {
-        console.log('EMA Extension: Required profile fields not found');
         return null;
       }
       const profileData = {
@@ -75,10 +71,8 @@
         url: window.location.href,
         extractedAt: new Date().toISOString()
       };
-      console.log('EMA Extension: Profile data extracted:', profileData);
       return profileData;
     } catch (error) {
-      console.error('EMA Extension: Error extracting profile data:', error);
       return null;
     }
   };
@@ -96,7 +90,6 @@
     tweetCollector.seenUrls.clear();
     tweetCollector.isRunning = false;
     tweetCollector.lastExtraction = 0;
-    console.log("Cleared tweet collection for fresh start");
   };
 
   const extractTweetData = () => {
@@ -117,7 +110,6 @@
         tweetCollector.isRunning = false;
         return { tweets: [], statistics: { total: 0 }, error: "Invalid profile URL", totalFound: 0 };
       }
-      console.log(`Extracting tweets for @${currentProfileHandle}...`);
       const tweetElements = document.querySelectorAll('article[data-testid="tweet"], [data-testid="cellInnerDiv"] article');
       let newTweetsFound = 0;
       tweetElements.forEach((tweetEl) => {
@@ -163,7 +155,6 @@
             
             if (!el) {
               if (selector === '[data-testid="like"]') {
-                console.log(`No like button found with any selector`);
               }
               return 0;
             }
@@ -172,17 +163,7 @@
             
             // ENHANCED DEBUGGING: Log ALL like button aria-labels, even empty ones
             if (selector === '[data-testid="like"]') {
-              console.log(`Like button aria-label: "${textToSearch}" (Length: ${textToSearch.length})`);
-              
-              // Also log the button's other attributes for debugging
-              console.log(`Like button debug:`, {
-                'aria-label': textToSearch,
-                'textContent': el.textContent,
-                'title': el.getAttribute('title'),
-                'data-state': el.getAttribute('data-state'),
-                'className': el.className,
-                'testId': el.getAttribute('data-testid')
-              });
+              //console.log(`Like button aria-label: "${textToSearch}"`);
             }
             
             // ENHANCED REGEX: Look for numbers anywhere in the text
@@ -190,11 +171,8 @@
 
             if (match) {
               let num = parseFloat(match[1].replace(/,/g, ''));
-              console.log(`Found number: ${num} from "${textToSearch}"`);
               return Math.round(num);
             }
-
-            console.log(`No number found in: "${textToSearch}"`);
             return 0;
           };
           // ENHANCED: Extract views from analytics button
@@ -267,7 +245,7 @@
       });
       tweetCollector.isRunning = false;
       if (newTweetsFound > 0) {
-        console.log(`Extraction complete: ${newTweetsFound} new, ${allTweets.length} total`);
+        //console.log(`Extraction complete: ${newTweetsFound} new, ${allTweets.length} total`);
       }
       return {
         tweets: allTweets,
@@ -275,7 +253,6 @@
       };
     } catch (error) {
       tweetCollector.isRunning = false;
-      console.error("Tweet extraction error:", error);
       return { tweets: [], statistics: { total: 0 }, error: error.message, extractedAt: new Date().toISOString(), totalFound: 0 };
     }
   };
@@ -292,7 +269,6 @@
       extractTweetData();
       lastTweetCount = countVisibleTweets();
       notifyTweetCount(lastTweetCount);
-      console.log(`Started with ${lastTweetCount} tweets`);
     }, 2000);
     tweetCountObserver = new MutationObserver((mutations) => {
       if (debounceTimer) clearTimeout(debounceTimer);
@@ -305,21 +281,18 @@
             const newTweets = currentCount - lastTweetCount;
             lastTweetCount = currentCount;
             notifyTweetCount(currentCount);
-            console.log(`Found ${newTweets} new tweets! Total: ${currentCount}`);
           }
         }, 1000);
       }
     });
     const container = document.querySelector('main[role="main"]') || document.body;
     tweetCountObserver.observe(container, { childList: true, subtree: true });
-    console.log('Stable observer started');
   };
 
   const stopTweetCountObserver = () => {
     if (tweetCountObserver) {
       tweetCountObserver.disconnect();
       tweetCountObserver = null;
-      console.log('Tweet observation stopped');
     }
   };
 

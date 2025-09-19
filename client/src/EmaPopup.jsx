@@ -5,6 +5,8 @@ import ProfilePreview from './components/ProfilePreview';
 import AuditScore from './components/AuditScore';
 import AuditSection from './components/AuditSection';
 import ShareCard from './components/ShareCard';
+import ContentPerformance from './components/ContentPerformance';
+import ContentTopics from './components/ContentTopics';
 import Footer from './components/Footer';
 import './EmaPopup.css';
 
@@ -24,7 +26,7 @@ const EmaPopup = () => {
     const handleMessage = (message) => {
       if (message.type === 'TWEET_COUNT_UPDATED') {
         setCurrentTweetCount(message.count);
-        console.log(`Real-time tweet count: ${message.count}`);
+        //console.log(`Real-time tweet count: ${message.count}`);
       }
     };
 
@@ -69,7 +71,7 @@ const EmaPopup = () => {
             if (response?.success && response.data) {
               setProfileData(response.data);
               setIsLoadingProfile(false);
-              console.log('✅ Profile data loaded:', response.data);
+              //console.log('✅ Profile data loaded:', response.data);
               return;
             }
           } catch (error) {
@@ -81,7 +83,7 @@ const EmaPopup = () => {
         const result = await chrome.storage.local.get(['latestProfile', 'profileAvailable']);
         if (result.latestProfile && result.profileAvailable) {
           setProfileData(result.latestProfile);
-          console.log('Using cached profile data:', result.latestProfile);
+          //console.log('Using cached profile data:', result.latestProfile);
         }
       } catch (error) {
         console.error('Error loading profile data:', error);
@@ -92,89 +94,13 @@ const EmaPopup = () => {
 
     loadProfileData();
   }, []);
-
-  // Handle popup staying open when pinned
-  // useEffect(() => {
-  //   const handleClickOutside = (event) => {
-  //     if (!isPinned) return;
-      
-  //     // Prevent popup from closing when pinned
-  //     event.preventDefault();
-  //     event.stopPropagation();
-  //   };
-
-  //   if (isPinned) {
-  //     document.addEventListener('click', handleClickOutside, true);
-  //     document.addEventListener('blur', handleClickOutside, true);
-  //   }
-
-  //   return () => {
-  //     document.removeEventListener('click', handleClickOutside, true);
-  //     document.removeEventListener('blur', handleClickOutside, true);
-  //   };
-  // }, [isPinned]);
-
-
-  //  Update the Pin toggle function to Provide better feedback
-  // const handleTogglePin = async () => {
-  //   const newPinnedState = !isPinned;
-  //   setIsPinned(newPinnedState);
-    
-  //   try {
-  //     // Get current tab
-  //     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-      
-  //     if (newPinnedState) {
-  //       // Store the pin state with current tab ID
-  //       await chrome.storage.local.set({ 
-  //         extensionPinned: true,
-  //         currentTabId: tab.id,
-  //         pinTimestamp: Date.now()
-  //       });
-        
-  //       // Notify background script about pin state
-  //       chrome.runtime.sendMessage({
-  //         type: 'PIN_STATE_CHANGED',
-  //         data: { isPinned: true, tabId: tab.id }
-  //       });
-        
-  //       console.log('Extension pinned to tab:', tab.id);
-
-  //       // Show user Feedback
-  //       const originalTitle = document.title;
-  //       document.title = 'Ema - Pinned';
-  //       setTimeout(() => {
-  //         document.title = originalTitle;
-  //       }, 2000);
-  //     } else {
-  //       // Unpin - remove pin state
-  //       await chrome.storage.local.set({ 
-  //         extensionPinned: false,
-  //         currentTabId: null 
-  //       });
-        
-  //       // Notify background script about pin state
-  //       chrome.runtime.sendMessage({
-  //         type: 'PIN_STATE_CHANGED',
-  //         data: { isPinned: false, tabId: tab.id }
-  //       });
-        
-  //       console.log('Extension unpinned');
-  //     }
-  //   } catch (error) {
-  //     console.error('Error saving pin state:', error);
-  //     // Revert state on error
-  //     setIsPinned(!newPinnedState);
-  //   }
-  // };
-
   const handleRunAudit = async () => {
     if (!profileData) {
       alert('No profile data available. Please visit an X/Twitter profile first.');
       return;
     }
 
-    console.log('🚀 Starting audit for profile:', profileData);
+
     setCurrentState('loading');
     setTweetExtractionStep('instructions');
     
@@ -185,17 +111,15 @@ const EmaPopup = () => {
       const response = await chrome.tabs.sendMessage(tab.id, { type: 'START_TWEET_COUNTING' });
       if (response?.success) {
         setCurrentTweetCount(response.count);
-        console.log('✅ Tweet counting started, initial count:', response.count);
       } else {
-        console.error('❌ Failed to start tweet counting:', response);
+        console.error('Failed to start tweet counting:', response);
       }
     } catch (error) {
-      console.error('❌ Error starting tweet counting:', error);
+      console.error('Error starting tweet counting:', error);
     }
   };
 
   const handleStartTweetExtraction = async () => {
-    console.log('🔄 Starting tweet extraction...');
     setTweetExtractionStep('extracting');
     
     try {
@@ -208,10 +132,6 @@ const EmaPopup = () => {
       
       if (response?.success) {
         setExtractedTweets(response.data);
-        console.log(`🎉 Extracted ${response.count} tweets in popup:`, response.data);
-        
-        // Show detailed extraction results
-        console.log(`🎉 Extracted ${response.count} tweets`);
         
         if (response.count < 10) {
           setTweetExtractionStep('need-more');
@@ -225,11 +145,9 @@ const EmaPopup = () => {
           }, 1000);
         }
       } else {
-        console.error('❌ Tweet extraction failed:', response);
         setTweetExtractionStep('error');
       }
     } catch (error) {
-      console.error('❌ Error extracting tweets:', error);
       setTweetExtractionStep('error');
     }
   };
@@ -238,34 +156,48 @@ const EmaPopup = () => {
   useEffect(() => {
     if (tweetExtractionStep === 'instructions' && currentTweetCount >= 15) {
       // Auto-proceed when we have enough tweets
-      console.log('🎯 Auto-extracting tweets, count:', currentTweetCount);
       setTimeout(() => {
         handleStartTweetExtraction();
       }, 500); // Small delay to avoid rapid triggering
     }
   }, [currentTweetCount, tweetExtractionStep]);
 
-  const analyzeExtractedData = (tweets) => {
-    console.log('🔍 Analyzing tweets for insights...');
+  const analyzeExtractedData =async (tweets) => {
+    try {
+      // Send data to the backend for analysis
+      const response = await fetch('http://localhost:3001/api/audit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          profileData,
+          tweets
+        })
+      });
+      if (!response.ok) {
+        throw new Error(`Server error: ${response.status}`)
+      }
+      const data = await response.json();
+      if (data.success) {
+        setAuditResults(data.results);
+        setCurrentState('results');
+        return;
+      }
+      else{
+        throw new Error(data.error || 'Analysis failed');
+      }
+    } catch (error) {
+      console.error('Error analyzing tweets:', error);
+    }
     
-    // TODO: Replace with actual AI analysis logic
-    const mockResults = {
-      score: 7,
-      maxScore: 10,
-      description: `Analysis complete for ${tweets.length} tweets.`,
-      doingRight: ['Consistent posting activity'],
-      doingWrong: ['Engagement could be improved'],
-      shouldStart: ['Focus on original content creation']
-    };
-    
-    setAuditResults(mockResults);
-    setCurrentState('results');
+  
   };
 
   const handleShareCard = () => {
     if (!auditResults) return;
     
-    const tweetText = `Just got my X profile audited by @EmaAudit! 🚀\n\nScore: ${auditResults.score}/${auditResults.maxScore}\n"${auditResults.description.substring(0, 100)}..."\n\nTry it yourself!`;
+    const tweetText = `Just got my X profile audited by @emaaudit! 🚀\n\nScore: ${auditResults.score}/${auditResults.maxScore}\n"${auditResults.description.substring(0, 100)}..."\n\nTry it yourself!`;
     const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
     window.open(tweetUrl, '_blank');
   };
@@ -374,7 +306,7 @@ const EmaPopup = () => {
             
             {tweetExtractionStep === 'need-more' && (
               <div className="tweet-instructions">
-                <h3>Need More Tweets 📈</h3>
+                <h3>Need More Tweets </h3>
                 <p>Only found {extractedTweets.length} tweets. For better analysis:</p>
                 <ol>
                   <li>Scroll down to load more tweets</li>
@@ -453,7 +385,7 @@ const EmaPopup = () => {
                 isExpanded={expandedSection === 'wrong'}
                 onToggle={() => toggleSection('wrong')}
               />
-              
+
               <AuditSection
                 type="start"
                 title="Growth Recommendations"
@@ -461,6 +393,23 @@ const EmaPopup = () => {
                 isExpanded={expandedSection === 'start'}
                 onToggle={() => toggleSection('start')}
               />
+
+              {auditResults.topPerforming && auditResults.lowestPerforming && (
+                <ContentPerformance
+                  topPerforming={auditResults.topPerforming}
+                  lowestPerforming={auditResults.lowestPerforming}
+                  isExpanded={expandedSection === 'performance'}
+                  onToggle={() => toggleSection('performance')}
+                />
+              )}
+
+              {auditResults.contentTopics && (
+                <ContentTopics
+                  contentTopics={auditResults.contentTopics}
+                  isExpanded={expandedSection === 'topics'}
+                  onToggle={() => toggleSection('topics')}
+                />
+              )}
             </div>
 
             <ShareCard 

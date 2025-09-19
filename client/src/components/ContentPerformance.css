@@ -1,0 +1,169 @@
+.content-performance {
+  background: white;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.performance-header {
+  width: 100%;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.performance-header:hover {
+  background: #f9fafb;
+}
+
+.performance-header-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.performance-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.icon-trending {
+  color: #8b5cf6;
+}
+
+.performance-title {
+  font-weight: 500;
+  color: #111827;
+  font-size: 14px;
+}
+
+.chevron-icon {
+  width: 16px;
+  height: 16px;
+  color: #9ca3af;
+}
+
+.performance-content {
+  padding: 0 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.performance-section {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.top-section {
+  border: 1px solid #d1fae5;
+  background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+}
+
+.bottom-section {
+  border: 1px solid #fed7d7;
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+}
+
+.section-header-mini {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.mini-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.icon-success {
+  color: #10b981;
+}
+
+.icon-warning {
+  color: #f59e0b;
+}
+
+.section-title-mini {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  margin: 0;
+}
+
+.content-list {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.content-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.content-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: bold;
+  color: white;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.content-number.success {
+  background: #10b981;
+}
+
+.content-number.warning {
+  background: #f59e0b;
+}
+
+.content-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.content-preview {
+  font-size: 13px;
+  color: #374151;
+  margin: 0 0 6px 0;
+  line-height: 1.4;
+  font-style: italic;
+}
+
+.content-reason {
+  font-size: 12px;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.content-reason strong {
+  color: #374151;
+}
+
+/* Responsive adjustments */
+@media (max-width: 350px) {
+  .content-item {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .content-number {
+    align-self: flex-start;
+  }
+}

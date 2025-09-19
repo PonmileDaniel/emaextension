@@ -1,0 +1,217 @@
+.content-topics {
+  background: white;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.topics-header {
+  width: 100%;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.topics-header:hover {
+  background: #f9fafb;
+}
+
+.topics-header-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.topics-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.icon-target {
+  color: #6366f1;
+}
+
+.topics-title {
+  font-weight: 500;
+  color: #111827;
+  font-size: 14px;
+}
+
+.chevron-icon {
+  width: 16px;
+  height: 16px;
+  color: #9ca3af;
+}
+
+.topics-content {
+  padding: 0 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.topics-section {
+  background: #f8fafc;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+}
+
+.section-header-mini {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-bottom: 1px solid #e2e8f0;
+  background: white;
+}
+
+.mini-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.icon-success {
+  color: #10b981;
+}
+
+.icon-primary {
+  color: #3b82f6;
+}
+
+.icon-secondary {
+  color: #6366f1;
+}
+
+.icon-timing {
+  color: #f59e0b;
+}
+
+.section-title-mini {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  margin: 0;
+}
+
+/* Topic Tags Grid */
+.topics-grid {
+  padding: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.topic-tag {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.topic-tag.success {
+  background: #d1fae5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+
+.topic-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #10b981;
+  color: white;
+  font-size: 10px;
+  font-weight: bold;
+}
+
+.topic-text {
+  white-space: nowrap;
+}
+
+/* Recommendations List */
+.recommendations-list {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.recommendation-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.rec-bullet {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.rec-bullet.primary {
+  background: #3b82f6;
+}
+
+.rec-text {
+  font-size: 13px;
+  color: #374151;
+  line-height: 1.4;
+}
+
+/* Format Tags */
+.formats-grid {
+  padding: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.format-tag {
+  padding: 6px 12px;
+  background: #e0e7ff;
+  color: #3730a3;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 500;
+  border: 1px solid #c7d2fe;
+}
+
+/* Timing Insights */
+.timing-insight {
+  padding: 16px;
+}
+
+.timing-text {
+  font-size: 13px;
+  color: #374151;
+  margin: 0;
+  line-height: 1.5;
+  background: white;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+}
+
+/* Responsive adjustments */
+@media (max-width: 350px) {
+  .topics-grid,
+  .formats-grid {
+    flex-direction: column;
+  }
+  
+  .topic-tag,
+  .format-tag {
+    justify-content: center;
+  }
+}

@@ -5,11 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && cp manifest.json dist/ && cp background.js dist/ && cp content.js dist/",
+    "build": "vite build && cp manifest.json dist/ && cp background.js dist/ && cp content.js dist/ && cp -r icons dist/",
     "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
+    "html2canvas": "^1.4.1",
     "lucide-react": "^0.542.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"

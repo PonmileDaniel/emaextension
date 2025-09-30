@@ -85,7 +85,7 @@ function landpage({ onNavigateToAudit }) {
           {/* Main CTA */}
           <div className="hero-cta-section">
             <button
-              onClick={onNavigateToAudit}
+              onClick={() => window.open('https://chromewebstore.google.com/detail/holfdpljbcknfpbndlemjhbkjeghahea?utm_source=item-share-cb', '_blank')}
               className="hero-cta-btn"
             >
               <span>Install Extension</span>
@@ -245,7 +245,7 @@ function landpage({ onNavigateToAudit }) {
           
           <div className="final-cta-buttons">
             <button 
-              onClick={onNavigateToAudit}
+              onClick={() => window.open('https://chromewebstore.google.com/detail/holfdpljbcknfpbndlemjhbkjeghahea?utm_source=item-share-cb', '_blank')}
               className="final-cta-primary"
             >
               <span>Install Extension Now</span>

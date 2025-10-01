@@ -3,13 +3,12 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import morgan from 'morgan';
 import helmet from 'helmet';
-// import compression from 'compression';
 import rateLimit from 'express-rate-limit';
-// import dotenv from 'dotenv';
+import dotenv from 'dotenv';
 
 import auditRoutes from './routes/audit.js'; // adjust path if needed
 
-// dotenv.config();
+dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -18,12 +17,14 @@ const PORT = process.env.PORT || 3000;
 app.use(helmet());
 app.use(morgan('combined'));
 app.use(bodyParser.json());
-// app.use(cors());
+
 
 // CORS configuration
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN,
+    origin: [
+      process.env.CORS_ORIGIN,
+    ],
     credentials: true,
     methods: ['GET', 'POST', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
@@ -45,5 +46,5 @@ app.use('/api/audit', auditRoutes);
 
 // Start server
 app.listen(PORT, () => {
-  console.log(`🚀 Server is running on port ${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });

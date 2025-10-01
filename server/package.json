@@ -4,7 +4,7 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "start": "node --import=dotenv/config index.js",
+    "start": "npm run dev",
     "dev": "nodemon --exec \"node --import=dotenv/config index.js\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -13,6 +13,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@google/genai": "^1.21.0",
     "@google/generative-ai": "^0.24.1",
     "axios": "^1.12.1",
     "compression": "^1.8.1",

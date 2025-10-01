@@ -1,29 +1,38 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenAI } from "@google/genai";
 
 class AIAnalyzer {
   constructor() {
-    this.genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+    this.genAI = new GoogleGenAI({
+      apiKey: process.env.GEMINI_API_KEY
+    });
   }
 
   /**
    * A robust wrapper for the Gemini API call that includes retries with exponential backoff.
    */
-  async _generateWithRetry(model, prompt, retries = 3, initialDelay = 1000) {
+  async _generateWithRetry(prompt, retries = 3, initialDelay = 1000) {
     let delay = initialDelay;
     for (let i = 0; i < retries; i++) {
       try {
         const result = await Promise.race([
-          model.generateContent(prompt),
+          this.genAI.models.generateContent({
+            model: "gemini-2.0-flash",
+            contents: prompt,
+          }),
           new Promise((_, reject) => 
-            setTimeout(() => reject(new Error('Request timed out after 20 seconds')), 20000)
+            setTimeout(() => reject(new Error('Request timed out after 30 seconds')), 30000)
           )
         ]);
+        // console.log('✅ Gemini API call successful');
         return result;
       } catch (error) {
-        const isNetworkError = error.message.includes('fetch failed') || error.message.includes('timed out');
+        // console.error(`❌ Attempt ${i + 1} failed:`, error.message);
+        const isNetworkError = error.message.includes('fetch failed') || 
+                               error.message.includes('timed out') ||
+                               error.message.includes('ENOTFOUND');
         
         if (isNetworkError && i < retries - 1) {
-          console.warn(`⚠️ Gemini API call failed (Attempt ${i + 1}/${retries}). Retrying in ${delay / 1000}s...`);
+          // console.log(`⏳ Waiting ${delay}ms before retry...`);
           await new Promise(resolve => setTimeout(resolve, delay));
           delay *= 2;
         } else {
@@ -33,13 +42,17 @@ class AIAnalyzer {
     }
   }
 
+  // ...existing code...
   async analyzeProfile(profileData, tweets) {
+    
     try {
       // Sort tweets by engagement for performance analysis
       const tweetsWithEngagement = tweets.map(tweet => ({
         ...tweet,
         totalEngagement: tweet.metrics.likes + tweet.metrics.retweets + tweet.metrics.replies
       })).sort((a, b) => b.totalEngagement - a.totalEngagement);
+
+      // console.log('📈 Top 3 tweets by engagement:', tweetsWithEngagement.slice(0, 3).map(t => ({ text: t.text.substring(0, 50), engagement: t.totalEngagement })));
 
       const tweetSummary = tweetsWithEngagement.slice(0, 20).map((tweet, i) => ({
         text: tweet.text.substring(0, 200),
@@ -51,23 +64,34 @@ class AIAnalyzer {
       }));
 
       const prompt = this._buildPrompt(profileData, tweetsWithEngagement, tweetSummary);
-      const model = this.genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
+      // console.log('📝 Generated prompt length:', prompt.length);
 
-      const result = await this._generateWithRetry(model, prompt);
-      const response = await result.response;
-      const text = response.text();
+      // console.log('🤖 Calling Gemini API with gemini-2.0-flash...');
+
+      const result = await this._generateWithRetry(prompt);
+      // console.log('✅ Got result from Gemini');
+      
+      const text = result.text;
+      // console.log('📄 Raw AI response:', text);
 
       const jsonMatch = text.match(/\{[\s\S]*\}/);
       if (!jsonMatch) {
+        console.error('❌ No JSON found in response');
         throw new Error("Invalid AI response format from Gemini");
       }
 
+      // console.log('🔧 Extracted JSON:', jsonMatch[0]);
       const auditResults = JSON.parse(jsonMatch[0]);
+      // console.log('✅ Parsed audit results:', auditResults);
 
       return auditResults;
     } catch (error) {
-      console.error("❌ Gemini AI error (after retries):", error.message);
-      return this._getFallbackResults(profileData, tweets);
+      console.error("❌ Gemini AI error (after retries):", error);
+      console.error("❌ Error stack:", error.stack);
+      console.log('🔄 Returning fallback results...');
+      const fallbackResults = this._getFallbackResults(profileData, tweets);
+      console.log('📋 Fallback results:', fallbackResults);
+      return fallbackResults;
     }
   }
 
